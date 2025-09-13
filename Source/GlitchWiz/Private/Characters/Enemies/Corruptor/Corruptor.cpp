@@ -3,6 +3,8 @@
 
 #include "Characters/Enemies/Corruptor/Corruptor.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Camera/CameraComponent.h"
 #include "Controllers/Corruptor/CorruptorAIController.h"
 
 
@@ -19,6 +21,7 @@ void ACorruptor::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), AllActors);
 }
 
 
@@ -47,6 +50,10 @@ void ACorruptor::Tick(float DeltaTime)
 	else
 	{
 		CorruptorAiController->SetState("Idle");
+	}
+	if (bIsAttacking == true && bCanTraceAttack == true)
+	{
+		PerformAttackTrace();
 	}
 }
 
@@ -78,11 +85,102 @@ void ACorruptor::StartAttack()
 			UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 			AnimInstance->Montage_Stop(0.1f);
 			AnimInstance->Montage_Play(AttackMontage, 1.0f);
+			
+			
 		}
 	}
 	else
 	{
 		bIsAttacking = false;
+	}
+}
+
+void ACorruptor::PerformAttackTrace()
+{
+	if (!GetMesh()) return;
+	FVector Start = GetMesh()->GetSocketLocation(AttackStartSocket);
+	FVector End = GetMesh()->GetSocketLocation(AttackEndSocket);
+	FQuat Rot = GetMesh()->GetSocketQuaternion(AttackStartSocket);
+	float Lenght = FVector::Distance(Start, End);
+	FVector HalfSize (AttackBoxHalfWidth, AttackBoxHalfHeight, Lenght * 0.5f);
+	FVector Center = FMath::Lerp(Start, End, 0.5f);
+	TArray<FHitResult> Hits;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+	GetWorld()->SweepMultiByChannel(Hits, Start, End, Rot, ECC_GameTraceChannel5, FCollisionShape::MakeBox(HalfSize), Params);
+	for (auto& Hit : Hits)
+	{
+		bHasHitTarget = true;
+		int32 StencilValue = 1;
+		AActor* Player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+		if (ACharacter* Char = Cast<ACharacter>(Player))
+		{
+			if (UCharacterMovementComponent* MoveComp = Char->GetCharacterMovement())
+			{
+				OriginalPlayerSpeed = MoveComp->MaxWalkSpeed;
+				MoveComp->MaxWalkSpeed = OriginalPlayerSpeed * 0.95f;
+			}
+		}
+		for (AActor* Actor : AllActors)
+		{
+			
+			if (Actor == Player) continue;
+
+			TArray<UActorComponent*> Components;
+			Actor->GetComponents(UPrimitiveComponent::StaticClass(), Components);
+			for (UActorComponent* Comp : Components)
+			{
+				if (UPrimitiveComponent* PrimComp = Cast<UPrimitiveComponent>(Comp))
+				{
+					PrimComp->SetRenderCustomDepth(true);
+					PrimComp->SetCustomDepthStencilValue(StencilValue);
+				}
+			}
+		}
+	}
+	DrawDebugBox(GetWorld(), Center, HalfSize, Rot, FColor::Red, false, 0.2);
+	FTimerHandle ResetHandle;
+	GetWorld()->GetTimerManager().SetTimer(
+		ResetHandle,
+		this,
+		&ACorruptor::ResetStencil,
+		3.0f,
+		false
+	);
+
+}
+
+
+
+void ACorruptor::ResetStencil()
+{
+	int32 ResetValue = 0;
+
+	AActor* Player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+
+	for (AActor* Actor : AllActors)
+	{
+		if (Actor == Player) continue;
+
+		TArray<UActorComponent*> Components;
+		Actor->GetComponents(UPrimitiveComponent::StaticClass(), Components);
+
+		for (UActorComponent* Comp : Components)
+		{
+			if (UPrimitiveComponent* PrimComp = Cast<UPrimitiveComponent>(Comp))
+			{
+				PrimComp->SetRenderCustomDepth(false);
+				PrimComp->SetCustomDepthStencilValue(ResetValue);
+			}
+		}
+	}
+	if (ACharacter* Char = Cast<ACharacter>(Player))
+	{
+		if (UCharacterMovementComponent* MoveComp = Char->GetCharacterMovement())
+		{
+			MoveComp->MaxWalkSpeed = OriginalPlayerSpeed;
+			
+		}
 	}
 }
 

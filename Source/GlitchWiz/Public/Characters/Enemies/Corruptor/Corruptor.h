@@ -44,6 +44,24 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Tombstone")
 	bool bIsAttacking = false;
 	void StartAttack();
+	UPROPERTY(EditAnywhere, Category="Attack")
+	FName AttackStartSocket;
+	UPROPERTY(EditAnywhere, Category="Attack")
+	FName AttackEndSocket;
+	UPROPERTY(EditAnywhere, Category="Attack")
+	float AttackBoxHalfHeight = 30.f;
+	UPROPERTY(EditAnywhere, Category="Attack")
+	float AttackBoxHalfWidth = 30.f;
+	void PerformAttackTrace();
+	UPROPERTY(Editanywhere, BlueprintReadWrite)
+	bool bCanTraceAttack = false;
+	TArray<AActor*> AllActors;
+	bool bHasHitTarget = false;
+	UFUNCTION()
+	void ResetStencil();
+	
+private:
+	float OriginalPlayerSpeed = 0.0f;
 	
 
 };
