@@ -2,9 +2,86 @@
 
 
 #include "Public/Spells/MagicMissile.h"
-#include "Spells/MagicMissile.h"
+#include "Engine/OverlapResult.h"
+#include "EntitySystem/MovieSceneEntitySystemRunner.h"
+#include "Projectiles/ProjectileBase.h"
+
+void AMagicMissile::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	
+}
 
 void AMagicMissile::PerformSpell()
 {
+	if (bIsSpellOnCooldown) { return; }
+
 	UE_LOG(LogTemp, Warning, TEXT("Perform magic missile spell"));
+
+	TArray<FOverlapResult> Overlaps;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(PlayerPawn);
+
+	bool bHasHit = GetWorld()->OverlapMultiByObjectType(
+		Overlaps,
+		PlayerPawn->GetActorLocation(),
+		FQuat::Identity,
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_GameTraceChannel2),
+		FCollisionShape::MakeSphere(1000.0f),
+		Params
+	);
+
+#if WITH_EDITOR
+	FColor SphereColor = bHasHit ? FColor::Green : FColor::Red;
+	DrawDebugSphere(
+		GetWorld(),
+		PlayerPawn->GetActorLocation(),
+		1000.0f,
+		16,
+		SphereColor,
+		false,
+		2.0f
+	);
+#endif
+
+	if (bHasHit)
+	{
+		for (auto& Overlap : Overlaps)
+		{
+			if (AActor* HitActor = Overlap.GetActor())
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Found enemy: %s"), *HitActor->GetName());
+
+				bIsSpellOnCooldown = true;
+
+				StartCooldownResetTimer();
+				
+				for (int32 i = 0; i < 3; i++)
+				{
+					FVector SpawnLocation = PlayerPawn->GetActorLocation();
+					FRotator SpawnRotation = (HitActor->GetActorLocation() - SpawnLocation).Rotation();
+
+					AMagicMissileProjectile* SpawnedProjectile = GetWorld()->SpawnActor<AMagicMissileProjectile>(
+						ProjectileClass,
+						SpawnLocation,
+						SpawnRotation
+					);
+
+					if (SpawnedProjectile)
+					{
+						SpawnedProjectile->SetTarget(HitActor);
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No enemies found"));
+	}
+}
+
+void AMagicMissile::StartCooldownResetTimer()
+{
+	Super::StartCooldownResetTimer();
 }
