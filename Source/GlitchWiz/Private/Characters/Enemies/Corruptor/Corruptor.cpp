@@ -32,7 +32,9 @@ void ACorruptor::Tick(float DeltaTime)
 	AActor* Target = CorruptorAiController->CurrentTarget;
 	if (Target)
 	{
-		if (AttackRange)
+		float Distance = GetDistanceTo(Target);
+		bool bInAttackRange = Distance <= AttackRange;
+		if (bInAttackRange)
 		{
 			CorruptorAiController->SetState("Attack");
 		}

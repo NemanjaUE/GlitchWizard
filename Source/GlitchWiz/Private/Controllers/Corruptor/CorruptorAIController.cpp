@@ -108,9 +108,9 @@ void ACorruptorAIController::SetState(FName NewState)
 	{
 		if (NewState == TEXT("Idle"))
 			Corruptor->CorruptorState = ECorruptorState::Idle;
-		if (NewState == TEXT("Chase"))
+		else if (NewState == TEXT("Chase"))
 			Corruptor->CorruptorState = ECorruptorState::Chase;
-		if (NewState == TEXT("Attack"))
+		else if (NewState == TEXT("Attack"))
 			Corruptor->CorruptorState = ECorruptorState::Attack;
 	}
 }
