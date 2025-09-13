@@ -72,7 +72,7 @@ void AGlitchWizCharacter::Dash()
 	UE_LOG(LogTemp, Warning, TEXT("Dashing"));
 
 	FVector DashDirection = GetVelocity();
-	DashDirection.Z = 0; // ignore vertical velocity for dash
+	DashDirection.Z = 0;
 
 	if (DashDirection.IsNearlyZero())
 	{
@@ -80,12 +80,10 @@ void AGlitchWizCharacter::Dash()
 	}
 
 	float ActualDashStrength = DashStrength;
-
-	// Reduce dash strength if in air
+	
 	if (!GetCharacterMovement()->IsMovingOnGround())
 	{
-		ActualDashStrength = FMath::Max(0.f, DashStrength - 2000.f); 
-		// ensures you don't go negative
+		ActualDashStrength = FMath::Max(0.f, DashStrength / 2.f); 
 	}
 
 	LaunchCharacter(DashDirection.GetSafeNormal() * ActualDashStrength, true, true);
