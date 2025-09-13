@@ -66,6 +66,19 @@ void AGlitchWizCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	}
 }
 
+void AGlitchWizCharacter::Dash()
+{
+	if (bIsDashOnCooldown) { return; }
+	UE_LOG(LogTemp, Warning, TEXT("Dashing"));
+
+	FVector Boost = GetVelocity().GetSafeNormal() * DashStrength;
+	LaunchCharacter(GetVelocity() + Boost, true, false);
+
+	bIsDashOnCooldown = true;
+	
+	GetWorldTimerManager().SetTimer(DashOnCooldownTimer, [this]() { bIsDashOnCooldown = false; }, 1.0f, false);
+}
+
 
 void AGlitchWizCharacter::MoveInput(const FInputActionValue& Value)
 {
@@ -74,7 +87,7 @@ void AGlitchWizCharacter::MoveInput(const FInputActionValue& Value)
 
 	// pass the axis values to the move input
 	DoMove(MovementVector.X, MovementVector.Y);
-
+	
 }
 
 void AGlitchWizCharacter::LookInput(const FInputActionValue& Value)

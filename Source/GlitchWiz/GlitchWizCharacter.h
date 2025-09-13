@@ -90,5 +90,12 @@ public:
 	/** Returns first person camera component **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
+public:
+	UFUNCTION(BlueprintCallable)
+	void Dash();
+	UPROPERTY(EditAnywhere)
+	float DashStrength = 2500.0f;
+	bool bIsDashOnCooldown = false;
+	FTimerHandle DashOnCooldownTimer;
 };
 
