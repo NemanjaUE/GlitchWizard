@@ -16,8 +16,9 @@ ASpellsBase::ASpellsBase()
 void ASpellsBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	InventoryComp = GetWorld()->GetFirstPlayerController()->GetPawn()->FindComponentByClass<UInventoryComponent>();
+	
+	PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
+	InventoryComp = PlayerPawn->FindComponentByClass<UInventoryComponent>();
 }
 
 // Called every frame
@@ -44,6 +45,11 @@ void ASpellsBase::AddSpellToInventory(ESpell SpellToAdd)
 ESpell ASpellsBase::GetSpellEnum() const
 {
 	return ESpell::None;
+}
+
+void ASpellsBase::StartCooldownResetTimer()
+{
+	GetWorldTimerManager().SetTimer(CooldownResetTimer, [this]() { bIsSpellOnCooldown = false; }, SpellCooldown, false);
 }
 
 void ASpellsBase::PerformSpell()

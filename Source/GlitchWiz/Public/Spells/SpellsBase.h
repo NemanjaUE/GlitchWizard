@@ -44,4 +44,16 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual ESpell GetSpellEnum() const;
+
+public:
+	APawn* PlayerPawn;
+
+	UPROPERTY(EditDefaultsOnly)
+	float SpellCooldown;
+
+	UPROPERTY(VisibleAnywhere)
+	bool bIsSpellOnCooldown = false;
+
+	FTimerHandle CooldownResetTimer;
+	virtual void StartCooldownResetTimer();
 };
