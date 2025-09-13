@@ -71,11 +71,26 @@ void AGlitchWizCharacter::Dash()
 	if (bIsDashOnCooldown) { return; }
 	UE_LOG(LogTemp, Warning, TEXT("Dashing"));
 
-	FVector Boost = GetVelocity().GetSafeNormal() * DashStrength;
-	LaunchCharacter(GetVelocity() + Boost, true, false);
+	FVector DashDirection = GetVelocity();
+	DashDirection.Z = 0; // ignore vertical velocity for dash
+
+	if (DashDirection.IsNearlyZero())
+	{
+		DashDirection = GetActorForwardVector();
+	}
+
+	float ActualDashStrength = DashStrength;
+
+	// Reduce dash strength if in air
+	if (!GetCharacterMovement()->IsMovingOnGround())
+	{
+		ActualDashStrength = FMath::Max(0.f, DashStrength - 2000.f); 
+		// ensures you don't go negative
+	}
+
+	LaunchCharacter(DashDirection.GetSafeNormal() * ActualDashStrength, true, true);
 
 	bIsDashOnCooldown = true;
-	
 	GetWorldTimerManager().SetTimer(DashOnCooldownTimer, [this]() { bIsDashOnCooldown = false; }, 1.0f, false);
 }
 
