@@ -22,6 +22,14 @@ void ACorruptor::BeginPlay()
 	Super::BeginPlay();
 	
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), AllActors);
+	if (ACharacter* PlayerChar = Cast<ACharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
+	{
+		if (UCharacterMovementComponent* MoveComp = PlayerChar->GetCharacterMovement())
+		{
+			OriginalPlayerSpeed = MoveComp->MaxWalkSpeed;
+			UE_LOG(LogTemp, Warning, TEXT("OriginalPlayerSpeed: %f"), OriginalPlayerSpeed);
+		}
+	}
 }
 
 
@@ -117,8 +125,9 @@ void ACorruptor::PerformAttackTrace()
 		{
 			if (UCharacterMovementComponent* MoveComp = Char->GetCharacterMovement())
 			{
-				OriginalPlayerSpeed = MoveComp->MaxWalkSpeed;
-				MoveComp->MaxWalkSpeed = OriginalPlayerSpeed * 0.95f;
+				float SlowedMoveSpeed = MoveComp->MaxWalkSpeed = OriginalPlayerSpeed * 0.5f;
+				MoveComp->MaxWalkSpeed = SlowedMoveSpeed;
+				UE_LOG(LogTemp, Warning, TEXT("%f"), SlowedMoveSpeed);
 			}
 		}
 		for (AActor* Actor : AllActors)
@@ -141,11 +150,11 @@ void ACorruptor::PerformAttackTrace()
 	DrawDebugBox(GetWorld(), Center, HalfSize, Rot, FColor::Red, false, 0.2);
 	FTimerHandle ResetHandle;
 	GetWorld()->GetTimerManager().SetTimer(
-		ResetHandle,
-		this,
-		&ACorruptor::ResetStencil,
-		3.0f,
-		false
+	ResetStencilHandle,
+	this,
+	&ACorruptor::ResetStencil,
+	3.0f,
+	false
 	);
 
 }
@@ -179,7 +188,7 @@ void ACorruptor::ResetStencil()
 		if (UCharacterMovementComponent* MoveComp = Char->GetCharacterMovement())
 		{
 			MoveComp->MaxWalkSpeed = OriginalPlayerSpeed;
-			
+			UE_LOG(LogTemp, Warning, TEXT("%f"), OriginalPlayerSpeed);
 		}
 	}
 }

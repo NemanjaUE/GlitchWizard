@@ -60,9 +60,10 @@ public:
 	bool bHasHitTarget = false;
 	UFUNCTION()
 	void ResetStencil();
+	FTimerHandle ResetStencilHandle;
 	
 private:
-	float OriginalPlayerSpeed = 0.0f;
+	float OriginalPlayerSpeed;
 	
 	virtual void ApplySlowEffect(float Percent, float Duration) override;
 };
