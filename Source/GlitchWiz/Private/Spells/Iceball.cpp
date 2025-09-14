@@ -7,6 +7,8 @@ void AIceball::PerformSpell()
 {
 	if (bIsSpellOnCooldown) { return; }
 
+	bIsSpellOnCooldown = true;
+
 	UE_LOG(LogTemp, Warning, TEXT("Perform iceball spell"));
 
 	AIceballProjectile* SpawnedProjectile = GetWorld()->SpawnActor<AIceballProjectile>(
@@ -16,6 +18,8 @@ void AIceball::PerformSpell()
 	);
 
 	SpawnedProjectile->FindComponentByClass<UStaticMeshComponent>()->AddImpulse(CameraComp->GetForwardVector() * FVector(100, 100, 100));
+
+	StartCooldownResetTimer();
 }
 
 void AIceball::StartCooldownResetTimer()
