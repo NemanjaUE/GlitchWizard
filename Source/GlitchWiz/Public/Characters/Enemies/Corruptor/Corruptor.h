@@ -65,5 +65,11 @@ public:
 private:
 	float OriginalPlayerSpeed;
 	
-	virtual void ApplySlowEffect(float Percent, float Duration) override;
+	virtual void ApplyIceballSlowEffect(float Percent, float Duration) override;
+	virtual void ApplyNoclipIceballEffect() override;
+	virtual void ApplyTextureMagicIceballEffect() override;
+	virtual void ApplyTPoseIceballEffect() override;
+
+	bool bShouldFall = false;
+	bool bIsAttackEnabled = true;
 };

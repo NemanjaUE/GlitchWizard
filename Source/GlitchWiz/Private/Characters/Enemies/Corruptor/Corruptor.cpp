@@ -5,6 +5,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Controllers/Corruptor/CorruptorAIController.h"
 
 
@@ -47,7 +48,7 @@ void ACorruptor::Tick(float DeltaTime)
 		float MinAttackDistance = 100.f;
 		float MaxAttackDistance = 150.f;
 		bool bInAttackRange = Distance >= MinAttackDistance && Distance <= MaxAttackDistance ;
-		if (bInAttackRange)
+		if (bInAttackRange && bIsAttackEnabled)
 		{
 			CorruptorAiController->SetState("Attack");
 		}
@@ -64,6 +65,18 @@ void ACorruptor::Tick(float DeltaTime)
 	if (bIsAttacking == true && bCanTraceAttack == true)
 	{
 		PerformAttackTrace();
+	}
+
+	if  (bShouldFall == true)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Should Fall"));
+		FVector CurrentLocation = GetActorLocation();
+
+		CurrentLocation.Z -= 100 * DeltaTime;
+
+		SetActorLocation(CurrentLocation);
+
+		
 	}
 }
 
@@ -95,8 +108,6 @@ void ACorruptor::StartAttack()
 			UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 			AnimInstance->Montage_Stop(0.1f);
 			AnimInstance->Montage_Play(AttackMontage, 1.0f);
-			
-			
 		}
 	}
 	else
@@ -195,7 +206,7 @@ void ACorruptor::ResetStencil()
 	}
 }
 
-void ACorruptor::ApplySlowEffect(float Percent, float Duration)
+void ACorruptor::ApplyIceballSlowEffect(float Percent, float Duration)
 {
 	float OriginalSpeed = GetCharacterMovement()->MaxWalkSpeed;
 	float NewSpeed = OriginalSpeed * (1.f - Percent);
@@ -204,4 +215,32 @@ void ACorruptor::ApplySlowEffect(float Percent, float Duration)
 	FTimerHandle ResetSlowTimer;
 	GetWorldTimerManager().SetTimer(ResetSlowTimer, [this]() { GetCharacterMovement()->MaxWalkSpeed = 600.0f; }, Duration, false);
 }
+
+void ACorruptor::ApplyNoclipIceballEffect()
+{
+	GetCharacterMovement()->StopMovementImmediately();
+	GetCharacterMovement()->Deactivate();
+
+	FTimerHandle DestroyTimer;
+	GetWorldTimerManager().SetTimer(DestroyTimer, [this]() { Destroy(); }, 5.0f, false);
+	
+	bShouldFall = true;
+}
+
+void ACorruptor::ApplyTPoseIceballEffect()
+{
+	bIsAttackEnabled = false;
+
+	FTimerHandle EnableAttackTimer;
+	GetWorldTimerManager().SetTimer(EnableAttackTimer, [this]() { bIsAttackEnabled = true; }, 5.0f, false);
+}
+
+void ACorruptor::ApplyTextureMagicIceballEffect()
+{
+	GetCharacterMovement()->MaxWalkSpeed = 0;
+
+	FTimerHandle ResetStunTimer;
+	GetWorldTimerManager().SetTimer(ResetStunTimer, [this]() { GetCharacterMovement()->MaxWalkSpeed = 600.0f; }, 5.0f, false);
+}
+
 

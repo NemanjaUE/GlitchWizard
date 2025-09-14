@@ -8,6 +8,7 @@
 #include "Components/Systems/InventoryComponent.h"
 #include "Interfaces/Pickupable.h"
 #include "Camera/CameraComponent.h"
+#include "GlitchWizCharacter.h"
 #include "SpellsBase.generated.h"
 
 UCLASS()
@@ -47,7 +48,7 @@ public:
 	virtual ESpell GetSpellEnum() const;
 
 public:
-	APawn* PlayerPawn;
+	AGlitchWizCharacter* PlayerPawn;
 	UCameraComponent* CameraComp;
 
 	UPROPERTY(EditDefaultsOnly)
@@ -63,7 +64,5 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	float SpellLength;
 	
-	static bool bIsNoclipSpellActive;
-	static bool bIsTPoseSpellActive;
-	static bool bIsTextureMagicSpellActive;
+	
 };

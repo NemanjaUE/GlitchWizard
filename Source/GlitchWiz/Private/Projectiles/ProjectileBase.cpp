@@ -3,6 +3,8 @@
 
 #include "Projectiles/ProjectileBase.h"
 
+#include "GlitchWizCharacter.h"
+
 // Sets default values
 AProjectileBase::AProjectileBase()
 {
@@ -15,7 +17,8 @@ AProjectileBase::AProjectileBase()
 void AProjectileBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	PlayerPawn = Cast<AGlitchWizCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 }
 
 // Called every frame

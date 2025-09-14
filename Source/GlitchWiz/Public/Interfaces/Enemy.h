@@ -21,6 +21,10 @@ class GLITCHWIZ_API IEnemy
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
+	
 public:
-	virtual void ApplySlowEffect(float Percent, float Duration) = 0;
+	virtual void ApplyIceballSlowEffect(float Percent, float Duration) = 0;
+	virtual void ApplyNoclipIceballEffect() = 0;
+	virtual void ApplyTPoseIceballEffect() = 0;
+	virtual void ApplyTextureMagicIceballEffect() = 0;
 };

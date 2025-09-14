@@ -4,9 +4,8 @@
 #include "Public/Spells/SpellsBase.h"
 #include "Spells/SpellsBase.h"
 
-bool ASpellsBase::bIsNoclipSpellActive = false;
-bool ASpellsBase::bIsTPoseSpellActive = false;
-bool ASpellsBase::bIsTextureMagicSpellActive = false;
+#include "GlitchWizCharacter.h"
+
 
 // Sets default values
 ASpellsBase::ASpellsBase()
@@ -21,7 +20,7 @@ void ASpellsBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
+	PlayerPawn = Cast<AGlitchWizCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	InventoryComp = PlayerPawn->FindComponentByClass<UInventoryComponent>();
 	CameraComp = PlayerPawn->FindComponentByClass<UCameraComponent>();
 }

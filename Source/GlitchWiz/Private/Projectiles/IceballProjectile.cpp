@@ -57,7 +57,26 @@ void AIceballProjectile::OnProjectileHit(FVector Location)
 			{
 				if (IEnemy* Enemy = Cast<IEnemy>(HitActor))
 				{
-					Enemy->ApplySlowEffect(0.4f, 3.0f);
+					if (PlayerPawn->bIsNoclipSpellActive)
+					{
+						UE_LOG(LogTemp, Warning, TEXT("Iceball noclip active"));
+						Enemy->ApplyNoclipIceballEffect();
+					}
+					if (PlayerPawn->bIsTextureMagicSpellActive)
+					{
+						UE_LOG(LogTemp, Warning, TEXT("Iceball texture magic active"));
+						Enemy->ApplyTextureMagicIceballEffect();
+					}
+					if (PlayerPawn->bIsTPoseSpellActive)
+					{
+						UE_LOG(LogTemp, Warning, TEXT("Iceball tpose active"));
+						Enemy->ApplyTPoseIceballEffect();
+					}
+					
+					else
+					{
+						Enemy->ApplyIceballSlowEffect(0.2f, 3.0f);
+					}
 				}
 			}
 		}

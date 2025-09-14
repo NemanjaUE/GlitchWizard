@@ -99,5 +99,9 @@ public:
 	FTimerHandle DashOnCooldownTimer;
 	UPROPERTY(EditAnywhere)
 	USoundBase* DashSound;
+
+	static bool bIsNoclipSpellActive;
+	static bool bIsTPoseSpellActive;
+	static bool bIsTextureMagicSpellActive;
 };
 

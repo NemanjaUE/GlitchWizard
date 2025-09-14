@@ -11,6 +11,12 @@
 #include "GlitchWiz.h"
 #include "Kismet/GameplayStatics.h"
 
+
+
+bool AGlitchWizCharacter::bIsNoclipSpellActive = false;
+bool AGlitchWizCharacter::bIsTPoseSpellActive = false;
+bool AGlitchWizCharacter::bIsTextureMagicSpellActive = false;
+
 AGlitchWizCharacter::AGlitchWizCharacter()
 {
 	// Set size for collision capsule

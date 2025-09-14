@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Public/Spells/MagicMissile.h"
 #include "Engine/OverlapResult.h"
 #include "EntitySystem/MovieSceneEntitySystemRunner.h"
@@ -10,7 +9,9 @@ void AMagicMissile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	UE_LOG(LogTemp, Warning, TEXT("bIsTextureMagicSpellActive = %s"), bIsTextureMagicSpellActive ? TEXT("true") : TEXT("false"));
+	//UE_LOG(LogTemp, Warning, TEXT("bIsTextureMagicSpellActive = %s"), PlayerPawn->bIsTextureMagicSpellActive ? TEXT("true") : TEXT("false"));
+	//UE_LOG(LogTemp, Warning, TEXT("bIsNoclipSpellActive = %s"), PlayerPawn->bIsNoclipSpellActive ? TEXT("true") : TEXT("false"));
+	//UE_LOG(LogTemp, Warning, TEXT("bIsTPoseSpellActive = %s"), PlayerPawn->bIsTPoseSpellActive ? TEXT("true") : TEXT("false"));
 }
 
 void AMagicMissile::PerformSpell()

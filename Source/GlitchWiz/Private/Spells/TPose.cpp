@@ -7,13 +7,13 @@ void ATPose::PerformSpell()
 {
 	if (bIsSpellOnCooldown) { return; }
 
-	bIsTPoseSpellActive = true;
+	PlayerPawn->bIsTPoseSpellActive = true;
 
 	bIsSpellOnCooldown = true;
 
 	StartCooldownResetTimer();
 
-	GetWorldTimerManager().SetTimer(TPoseActiveResetTimer, [this]() { bIsTPoseSpellActive = false; }, SpellLength, false);
+	GetWorldTimerManager().SetTimer(TPoseActiveResetTimer, [this]() { PlayerPawn->bIsTPoseSpellActive = false; }, SpellLength, false);
 }
 
 void ATPose::StartCooldownResetTimer()

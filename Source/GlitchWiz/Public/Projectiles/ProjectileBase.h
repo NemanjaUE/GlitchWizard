@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GlitchWizCharacter.h"
 #include "ProjectileBase.generated.h"
 
 UCLASS()
@@ -23,4 +24,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+protected:
+	AGlitchWizCharacter* PlayerPawn;
 };

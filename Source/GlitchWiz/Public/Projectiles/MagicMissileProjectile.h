@@ -15,6 +15,8 @@ class GLITCHWIZ_API AMagicMissileProjectile : public AProjectileBase
 {
 	GENERATED_BODY()
 
+	AMagicMissileProjectile();
+	
 protected:
 	virtual void BeginPlay() override;
 	
@@ -35,4 +37,16 @@ public:
 	{
 		TargetActor = InTarget;
 	}
+
+	void AcquireNewTarget();
+
+	UFUNCTION()
+	void OnOverlapBegin(
+		UPrimitiveComponent* OverlappedComp,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult
+	);
 };

@@ -14,7 +14,7 @@ void ANoclip::PerformSpell()
 	PlayerPawn->FindComponentByClass<UCapsuleComponent>()->SetCollisionResponseToChannel(
 		ECC_GameTraceChannel2, ECR_Ignore);
 
-	bIsNoclipSpellActive = true;
+	PlayerPawn->bIsNoclipSpellActive = true;
 
 	bIsSpellOnCooldown = true;
 
@@ -22,7 +22,7 @@ void ANoclip::PerformSpell()
 
 	GetWorldTimerManager().SetTimer(NoclipActiveResetTimer, [this]()
 	{
-		bIsNoclipSpellActive = false;
+		PlayerPawn->bIsNoclipSpellActive = false;
 		PlayerPawn->FindComponentByClass<UCapsuleComponent>()->SetCollisionResponseToChannel(
 		ECC_GameTraceChannel6, ECR_Block);
 		PlayerPawn->FindComponentByClass<UCapsuleComponent>()->SetCollisionResponseToChannel(
