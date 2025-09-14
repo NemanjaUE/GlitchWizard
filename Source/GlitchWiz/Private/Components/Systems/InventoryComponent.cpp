@@ -84,16 +84,13 @@ void UInventoryComponent::EquipSpell(ESpell SpellToEquip)
 	}
 }
 
-void UInventoryComponent::UnequipSpell(ESpell SpellToUnequip)
+void UInventoryComponent::UnequipSpell()
 {
-	ASpellsBase* SpellActor = nullptr;
-
-	if (SpellActorMap.Contains(SpellToUnequip))
+	if (EquippedSpell)
 	{
-		SpellActor = SpellActorMap[SpellToUnequip];
+		EquippedSpell->bCanBeEquipped = true;
+		UE_LOG(LogTemp, Warning, TEXT("Unequipped spell: %s"), *EquippedSpell->GetName());
+		EquippedSpell = nullptr;
 	}
-
-	EquippedSpell = nullptr;
-	SpellActor->bCanBeEquipped = true;
 }
 

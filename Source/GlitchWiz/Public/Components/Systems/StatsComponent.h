@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Enums/ESpell.h"
-#include "InventoryComponent.generated.h"
+#include "Enums/EStat.h"
+#include "StatsComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class GLITCHWIZ_API UInventoryComponent : public UActorComponent
+class GLITCHWIZ_API UStatsComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UInventoryComponent();
+	UStatsComponent();
 
 protected:
 	// Called when the game starts
@@ -26,19 +26,13 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
-	TMap<ESpell, int32> SpellMap;
-	TMap<ESpell, class ASpellsBase*> SpellActorMap;
-
-	void AddSpellToInventory(ESpell SpellID, int32 Amount);
-	void RemoveSpellFromInventory(ESpell SpellID, int32 Amount);
-	void StoreSpellActor(ESpell SpellID, class ASpellsBase* SpellActor);
+	UPROPERTY(EditAnywhere)
+	TMap<EStat, float> Stats;
 
 	UFUNCTION(BlueprintCallable)
-	void EquipSpell(ESpell SpellToEquip);
-
+	void ReduceHealth(float Amount);
+	
 	UFUNCTION(BlueprintCallable)
-	void UnequipSpell();
-
-	UPROPERTY(BlueprintReadWrite)
-	ASpellsBase* EquippedSpell;
+	float GetStat(EStat Stat) const;
+		
 };
