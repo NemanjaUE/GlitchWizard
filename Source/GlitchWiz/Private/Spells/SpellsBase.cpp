@@ -6,6 +6,7 @@
 
 bool ASpellsBase::bIsNoclipSpellActive = false;
 bool ASpellsBase::bIsTPoseSpellActive = false;
+bool ASpellsBase::bIsTextureMagicSpellActive = false;
 
 // Sets default values
 ASpellsBase::ASpellsBase()

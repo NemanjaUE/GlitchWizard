@@ -10,7 +10,7 @@ void AMagicMissile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	UE_LOG(LogTemp, Warning, TEXT("bIsTPoseSpellActive = %s"), bIsTPoseSpellActive ? TEXT("true") : TEXT("false"));
+	UE_LOG(LogTemp, Warning, TEXT("bIsTextureMagicSpellActive = %s"), bIsTextureMagicSpellActive ? TEXT("true") : TEXT("false"));
 }
 
 void AMagicMissile::PerformSpell()

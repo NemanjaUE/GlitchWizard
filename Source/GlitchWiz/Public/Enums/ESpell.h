@@ -11,5 +11,6 @@ enum class ESpell : uint8
 	MagicMissile,
 	Iceball,
 	Noclip,
-	TPose
+	TPose,
+	TextureMagic
 };

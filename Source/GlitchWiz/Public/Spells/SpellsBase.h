@@ -65,4 +65,5 @@ public:
 	
 	static bool bIsNoclipSpellActive;
 	static bool bIsTPoseSpellActive;
+	static bool bIsTextureMagicSpellActive;
 };
