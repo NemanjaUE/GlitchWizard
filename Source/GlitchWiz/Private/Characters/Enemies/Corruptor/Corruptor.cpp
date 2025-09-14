@@ -44,7 +44,9 @@ void ACorruptor::Tick(float DeltaTime)
 	if (Target)
 	{
 		float Distance = GetDistanceTo(Target);
-		bool bInAttackRange = Distance <= AttackRange;
+		float MinAttackDistance = 100.f;
+		float MaxAttackDistance = 150.f;
+		bool bInAttackRange = Distance >= MinAttackDistance && Distance <= MaxAttackDistance ;
 		if (bInAttackRange)
 		{
 			CorruptorAiController->SetState("Attack");
@@ -125,7 +127,7 @@ void ACorruptor::PerformAttackTrace()
 		{
 			if (UCharacterMovementComponent* MoveComp = Char->GetCharacterMovement())
 			{
-				float SlowedMoveSpeed = MoveComp->MaxWalkSpeed = OriginalPlayerSpeed * 0.5f;
+				float SlowedMoveSpeed = MoveComp->MaxWalkSpeed = OriginalPlayerSpeed * 0.50f;
 				MoveComp->MaxWalkSpeed = SlowedMoveSpeed;
 				UE_LOG(LogTemp, Warning, TEXT("%f"), SlowedMoveSpeed);
 			}

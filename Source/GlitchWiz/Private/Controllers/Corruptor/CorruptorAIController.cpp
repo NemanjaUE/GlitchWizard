@@ -13,7 +13,7 @@ ACorruptorAIController::ACorruptorAIController()
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
 	SightConfig->SightRadius = 2500.0f;
 	SightConfig->LoseSightRadius = 1000.0f;
-	SightConfig->PeripheralVisionAngleDegrees = 120.0f;
+	SightConfig->PeripheralVisionAngleDegrees = 200.0f;
 	SightConfig->SetMaxAge(5.0f);
 	SightConfig->AutoSuccessRangeFromLastSeenLocation = 0.0f;
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
