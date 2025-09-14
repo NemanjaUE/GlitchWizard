@@ -184,3 +184,13 @@ void ACorruptor::ResetStencil()
 	}
 }
 
+void ACorruptor::ApplySlowEffect(float Percent, float Duration)
+{
+	float OriginalSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	float NewSpeed = OriginalSpeed * (1.f - Percent);
+	GetCharacterMovement()->MaxWalkSpeed = NewSpeed;
+
+	FTimerHandle ResetSlowTimer;
+	GetWorldTimerManager().SetTimer(ResetSlowTimer, [this]() { GetCharacterMovement()->MaxWalkSpeed = 600.0f; }, Duration, false);
+}
+

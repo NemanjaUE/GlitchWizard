@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "GameFramework/Character.h"
+#include "Interfaces/Enemy.h"
 #include "Corruptor.generated.h"
 
 UENUM(BlueprintType)
@@ -15,7 +16,7 @@ enum class ECorruptorState : uint8
 	Attack,
 };
 UCLASS()
-class GLITCHWIZ_API ACorruptor : public ACharacter
+class GLITCHWIZ_API ACorruptor : public ACharacter, public IEnemy
 {
 	GENERATED_BODY()
 
@@ -63,5 +64,5 @@ public:
 private:
 	float OriginalPlayerSpeed = 0.0f;
 	
-
+	virtual void ApplySlowEffect(float Percent, float Duration) override;
 };

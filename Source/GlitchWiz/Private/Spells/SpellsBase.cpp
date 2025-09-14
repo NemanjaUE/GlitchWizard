@@ -19,6 +19,7 @@ void ASpellsBase::BeginPlay()
 	
 	PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
 	InventoryComp = PlayerPawn->FindComponentByClass<UInventoryComponent>();
+	CameraComp = PlayerPawn->FindComponentByClass<UCameraComponent>();
 }
 
 // Called every frame

@@ -97,5 +97,7 @@ public:
 	float DashStrength = 2500.0f;
 	bool bIsDashOnCooldown = false;
 	FTimerHandle DashOnCooldownTimer;
+	UPROPERTY(EditAnywhere)
+	USoundBase* DashSound;
 };
 

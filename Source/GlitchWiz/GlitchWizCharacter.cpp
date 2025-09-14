@@ -9,6 +9,7 @@
 #include "InputActionValue.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GlitchWiz.h"
+#include "Kismet/GameplayStatics.h"
 
 AGlitchWizCharacter::AGlitchWizCharacter()
 {
@@ -85,6 +86,8 @@ void AGlitchWizCharacter::Dash()
 	{
 		ActualDashStrength = FMath::Max(0.f, DashStrength / 2.f); 
 	}
+
+	UGameplayStatics::PlaySoundAtLocation(this, DashSound, GetActorLocation());
 
 	LaunchCharacter(DashDirection.GetSafeNormal() * ActualDashStrength, true, true);
 

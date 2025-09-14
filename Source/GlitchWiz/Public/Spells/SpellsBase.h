@@ -7,6 +7,7 @@
 #include "Enums/ESpell.h"
 #include "Components/Systems/InventoryComponent.h"
 #include "Interfaces/Pickupable.h"
+#include "Camera/CameraComponent.h"
 #include "SpellsBase.generated.h"
 
 UCLASS()
@@ -47,6 +48,7 @@ public:
 
 public:
 	APawn* PlayerPawn;
+	UCameraComponent* CameraComp;
 
 	UPROPERTY(EditDefaultsOnly)
 	float SpellCooldown;
