@@ -9,5 +9,6 @@ enum class ESpell : uint8
 {
 	None,
 	MagicMissile,
-	Iceball
+	Iceball,
+	Noclip
 };
