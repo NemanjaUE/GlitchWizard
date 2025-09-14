@@ -10,5 +10,6 @@ enum class ESpell : uint8
 	None,
 	MagicMissile,
 	Iceball,
-	Noclip
+	Noclip,
+	TPose
 };

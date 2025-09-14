@@ -4,12 +4,15 @@
 #include "Public/Spells/SpellsBase.h"
 #include "Spells/SpellsBase.h"
 
+bool ASpellsBase::bIsNoclipSpellActive = false;
+bool ASpellsBase::bIsTPoseSpellActive = false;
+
 // Sets default values
 ASpellsBase::ASpellsBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	
 }
 
 // Called when the game starts or when spawned

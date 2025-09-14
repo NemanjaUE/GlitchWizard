@@ -20,7 +20,7 @@ void ANoclip::PerformSpell()
 
 	StartCooldownResetTimer();
 
-	GetWorldTimerManager().SetTimer(SpellActiveResetTimer, [this]()
+	GetWorldTimerManager().SetTimer(NoclipActiveResetTimer, [this]()
 	{
 		bIsNoclipSpellActive = false;
 		PlayerPawn->FindComponentByClass<UCapsuleComponent>()->SetCollisionResponseToChannel(

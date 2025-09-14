@@ -59,10 +59,10 @@ public:
 	FTimerHandle CooldownResetTimer;
 	virtual void StartCooldownResetTimer();
 
-	FTimerHandle SpellActiveResetTimer;
+	
 	UPROPERTY(EditDefaultsOnly)
 	float SpellLength;
-
-	UPROPERTY(VisibleAnywhere)
-	bool bIsNoclipSpellActive = false;
+	
+	static bool bIsNoclipSpellActive;
+	static bool bIsTPoseSpellActive;
 };
