@@ -8,12 +8,17 @@ void ATPose::PerformSpell()
 	if (bIsSpellOnCooldown) { return; }
 
 	PlayerPawn->bIsTPoseSpellActive = true;
+	PlayerPawn->AmountOfActiveEffects += 1;
 
 	bIsSpellOnCooldown = true;
 
 	StartCooldownResetTimer();
 
-	GetWorldTimerManager().SetTimer(TPoseActiveResetTimer, [this]() { PlayerPawn->bIsTPoseSpellActive = false; }, SpellLength, false);
+	GetWorldTimerManager().SetTimer(TPoseActiveResetTimer, [this]()
+	{
+		PlayerPawn->bIsTPoseSpellActive = false;
+		PlayerPawn->AmountOfActiveEffects -= 1;
+	}, SpellLength, false);
 }
 
 void ATPose::StartCooldownResetTimer()

@@ -77,7 +77,7 @@ void AGlitchWizCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	
+	//UE_LOG(LogTemp, Warning, TEXT("Amount of active effects: %d"), AmountOfActiveEffects);
 }
 
 void AGlitchWizCharacter::Dash()
@@ -100,6 +100,21 @@ void AGlitchWizCharacter::Dash()
 			ECC_GameTraceChannel2, ECR_Block); }, 1.0f, false);
 
 		UGameplayStatics::PlaySoundAtLocation(this, DashSoundGlitch, GetActorLocation());
+	}
+
+	if (bIsTPoseSpellActive)
+	{
+		FindComponentByClass<UCapsuleComponent>()->SetCollisionResponseToChannel(
+		ECC_GameTraceChannel7, ECR_Ignore);
+
+		FTimerHandle UnbreakObjectsTimer;
+		GetWorldTimerManager().SetTimer(UnbreakObjectsTimer, [this]()
+		{
+			FindComponentByClass<UCapsuleComponent>()->SetCollisionResponseToChannel(
+		ECC_GameTraceChannel7, ECR_Block);
+		}, 1.0f, false);
+		
+		UGameplayStatics::PlaySoundAtLocation(this, DashSoundBreak, GetActorLocation());
 	}
 	else
 	{

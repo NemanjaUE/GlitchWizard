@@ -4,6 +4,7 @@
 #include "Components/Systems/InteractComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Interfaces/Pickupable.h"
+#include "Interfaces/Interactable.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values for this component's properties
@@ -49,7 +50,7 @@ void UInteractComponent::PerformInteractTrace()
 		UKismetSystemLibrary::DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Green, 2, 2);
 	}
 	
-	bool bInteractableHit{
+	bool bPickupableHit{
 		GetWorld()->LineTraceSingleByChannel(
 		InteractableHit,
 		StartLocation,
@@ -58,7 +59,7 @@ void UInteractComponent::PerformInteractTrace()
 		IgnoreParams
 	) };
 
-	if (bInteractableHit)
+	if (bPickupableHit)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Pickupable Hit"));
 		AActor* HitActor{ InteractableHit.GetActor() };
@@ -70,6 +71,31 @@ void UInteractComponent::PerformInteractTrace()
 			if (ItemToPickUp)
 			{
 				ItemToPickUp->PickUp();
+			}
+		}
+	}
+
+	bool bInteractableHit{
+		GetWorld()->LineTraceSingleByChannel(
+		InteractableHit,
+		StartLocation,
+		EndLocation,
+		ECC_GameTraceChannel8,
+		IgnoreParams
+	) };
+
+	if (bInteractableHit)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Interactable Hit"));
+		AActor* HitActor{ InteractableHit.GetActor() };
+
+		if (HitActor && HitActor->Implements<UInteractable>())
+		{
+			IInteractable* Interactable{ Cast<IInteractable>(HitActor) };
+
+			if (Interactable)
+			{
+				Interactable->Interact();
 			}
 		}
 	}

@@ -104,10 +104,14 @@ public:
 	USoundBase* DashSound;
 	UPROPERTY(EditAnywhere)
 	USoundBase* DashSoundGlitch;
+	UPROPERTY(EditAnywhere)
+	USoundBase* DashSoundBreak;
 
 	static bool bIsNoclipSpellActive;
 	static bool bIsTPoseSpellActive;
 	static bool bIsTextureMagicSpellActive;
-	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int AmountOfActiveEffects;
 };
 

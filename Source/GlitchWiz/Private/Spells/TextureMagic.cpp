@@ -8,12 +8,17 @@ void ATextureMagic::PerformSpell()
 	if (bIsSpellOnCooldown) { return; }
 
 	PlayerPawn->bIsTextureMagicSpellActive = true;
+	PlayerPawn->AmountOfActiveEffects += 1;
 
 	bIsSpellOnCooldown = true;
 
 	StartCooldownResetTimer();
 
-	GetWorldTimerManager().SetTimer(TextureMagicActiveResetTimer, [this]() { PlayerPawn->bIsTextureMagicSpellActive = false; }, SpellLength, false);
+	GetWorldTimerManager().SetTimer(TextureMagicActiveResetTimer, [this]()
+	{
+		PlayerPawn->bIsTextureMagicSpellActive = false;
+		PlayerPawn->AmountOfActiveEffects -= 1;
+	}, SpellLength, false);
 }
 
 void ATextureMagic::StartCooldownResetTimer()

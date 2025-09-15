@@ -171,8 +171,6 @@ void ACorruptor::PerformAttackTrace()
 
 }
 
-
-
 void ACorruptor::ResetStencil()
 {
 	int32 ResetValue = 0;

@@ -15,12 +15,17 @@ void ANoclip::PerformSpell()
 	// 	ECC_GameTraceChannel2, ECR_Ignore);
 
 	PlayerPawn->bIsNoclipSpellActive = true;
+	PlayerPawn->AmountOfActiveEffects += 1;
 
 	bIsSpellOnCooldown = true;
 
 	StartCooldownResetTimer();
 
-	GetWorldTimerManager().SetTimer(NoclipActiveResetTimer, [this](){PlayerPawn->bIsNoclipSpellActive = false;}, SpellLength, false);
+	GetWorldTimerManager().SetTimer(NoclipActiveResetTimer, [this]()
+	{
+		PlayerPawn->bIsNoclipSpellActive = false;
+		PlayerPawn->AmountOfActiveEffects -= 1;
+	}, SpellLength, false);
 }
 
 void ANoclip::StartCooldownResetTimer()
