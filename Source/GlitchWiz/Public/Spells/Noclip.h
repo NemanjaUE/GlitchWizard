@@ -14,6 +14,9 @@ class GLITCHWIZ_API ANoclip : public ASpellsBase
 {
 	GENERATED_BODY()
 
+public:
+	virtual void Tick(float DeltaTime) override;
+
 protected:
 	virtual ESpell GetSpellEnum() const override { return ESpell::Noclip; }
 	
@@ -22,4 +25,7 @@ protected:
 	virtual void StartCooldownResetTimer() override;
 
 	FTimerHandle NoclipActiveResetTimer;
+
+public:
+	
 };

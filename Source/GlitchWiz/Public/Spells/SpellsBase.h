@@ -51,7 +51,7 @@ public:
 	AGlitchWizCharacter* PlayerPawn;
 	UCameraComponent* CameraComp;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float SpellCooldown;
 
 	UPROPERTY(VisibleAnywhere)
@@ -59,10 +59,10 @@ public:
 
 	FTimerHandle CooldownResetTimer;
 	virtual void StartCooldownResetTimer();
-
 	
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float SpellLength;
-	
-	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float TimeUntilSpellEnds = SpellLength;
 };
