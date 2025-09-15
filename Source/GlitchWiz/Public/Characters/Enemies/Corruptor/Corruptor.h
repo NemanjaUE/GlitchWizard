@@ -42,7 +42,7 @@ public:
 	float GetMovementSpeed() const;
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Corruptor")
 	ECorruptorState CorruptorState = ECorruptorState::Idle;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Tombstone")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Corruptor")
 	bool bIsAttacking = false;
 	void StartAttack();
 	UPROPERTY(EditAnywhere, Category="Attack")

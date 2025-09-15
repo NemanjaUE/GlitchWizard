@@ -75,5 +75,7 @@ private:
 	virtual void ApplyTPoseIceballEffect() override;
 	virtual void ApplyIceballSlowEffect(float Percent, float Duration) override;
 	virtual void ApplyTextureMagicIceballEffect() override;
-	virtual void ApplyDamageMomentum(float DamageTaken, FDamageEvent const& DamageEvent, APawn* PawnInstigator, AActor* DamageCauser) override;
+
+	bool bShouldFall = false;
+	bool bIsAttackEnabled = true;
 };

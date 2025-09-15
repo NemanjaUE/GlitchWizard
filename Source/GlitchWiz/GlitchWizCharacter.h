@@ -91,6 +91,9 @@ public:
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
 public:
+
+	virtual void Tick(float DeltaTime) override;
+	
 	UFUNCTION(BlueprintCallable)
 	void Dash();
 	UPROPERTY(EditAnywhere)
@@ -99,9 +102,12 @@ public:
 	FTimerHandle DashOnCooldownTimer;
 	UPROPERTY(EditAnywhere)
 	USoundBase* DashSound;
+	UPROPERTY(EditAnywhere)
+	USoundBase* DashSoundGlitch;
 
 	static bool bIsNoclipSpellActive;
 	static bool bIsTPoseSpellActive;
 	static bool bIsTextureMagicSpellActive;
+	
 };
 

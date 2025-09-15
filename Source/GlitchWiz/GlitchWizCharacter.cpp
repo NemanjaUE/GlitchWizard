@@ -73,10 +73,38 @@ void AGlitchWizCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	}
 }
 
+void AGlitchWizCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	
+}
+
 void AGlitchWizCharacter::Dash()
 {
 	if (bIsDashOnCooldown) { return; }
 	UE_LOG(LogTemp, Warning, TEXT("Dashing"));
+
+	if (bIsNoclipSpellActive)
+	{
+		FindComponentByClass<UCapsuleComponent>()->SetCollisionResponseToChannel(
+		ECC_GameTraceChannel6, ECR_Ignore);
+		FindComponentByClass<UCapsuleComponent>()->SetCollisionResponseToChannel(
+			ECC_GameTraceChannel2, ECR_Ignore);
+
+		FTimerHandle BlockObjectsTimer;
+		GetWorldTimerManager().SetTimer(BlockObjectsTimer, [this]() {
+			FindComponentByClass<UCapsuleComponent>()->SetCollisionResponseToChannel(
+		ECC_GameTraceChannel6, ECR_Block);
+		FindComponentByClass<UCapsuleComponent>()->SetCollisionResponseToChannel(
+			ECC_GameTraceChannel2, ECR_Block); }, 1.0f, false);
+
+		UGameplayStatics::PlaySoundAtLocation(this, DashSoundGlitch, GetActorLocation());
+	}
+	else
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, DashSound, GetActorLocation());
+	}
 
 	FVector DashDirection = GetVelocity();
 	DashDirection.Z = 0;
@@ -92,8 +120,6 @@ void AGlitchWizCharacter::Dash()
 	{
 		ActualDashStrength = FMath::Max(0.f, DashStrength / 2.f); 
 	}
-
-	UGameplayStatics::PlaySoundAtLocation(this, DashSound, GetActorLocation());
 
 	LaunchCharacter(DashDirection.GetSafeNormal() * ActualDashStrength, true, true);
 

@@ -9,10 +9,10 @@ void ANoclip::PerformSpell()
 {
 	if (bIsSpellOnCooldown) { return; }
 
-	PlayerPawn->FindComponentByClass<UCapsuleComponent>()->SetCollisionResponseToChannel(
-		ECC_GameTraceChannel6, ECR_Ignore);
-	PlayerPawn->FindComponentByClass<UCapsuleComponent>()->SetCollisionResponseToChannel(
-		ECC_GameTraceChannel2, ECR_Ignore);
+	// PlayerPawn->FindComponentByClass<UCapsuleComponent>()->SetCollisionResponseToChannel(
+	// 	ECC_GameTraceChannel6, ECR_Ignore);
+	// PlayerPawn->FindComponentByClass<UCapsuleComponent>()->SetCollisionResponseToChannel(
+	// 	ECC_GameTraceChannel2, ECR_Ignore);
 
 	PlayerPawn->bIsNoclipSpellActive = true;
 
@@ -20,14 +20,7 @@ void ANoclip::PerformSpell()
 
 	StartCooldownResetTimer();
 
-	GetWorldTimerManager().SetTimer(NoclipActiveResetTimer, [this]()
-	{
-		PlayerPawn->bIsNoclipSpellActive = false;
-		PlayerPawn->FindComponentByClass<UCapsuleComponent>()->SetCollisionResponseToChannel(
-		ECC_GameTraceChannel6, ECR_Block);
-		PlayerPawn->FindComponentByClass<UCapsuleComponent>()->SetCollisionResponseToChannel(
-		ECC_GameTraceChannel2, ECR_Block);
-	}, SpellLength, false);
+	GetWorldTimerManager().SetTimer(NoclipActiveResetTimer, [this](){PlayerPawn->bIsNoclipSpellActive = false;}, SpellLength, false);
 }
 
 void ANoclip::StartCooldownResetTimer()

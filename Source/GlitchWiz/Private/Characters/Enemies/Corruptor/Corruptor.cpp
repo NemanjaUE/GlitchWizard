@@ -75,8 +75,6 @@ void ACorruptor::Tick(float DeltaTime)
 		CurrentLocation.Z -= 100 * DeltaTime;
 
 		SetActorLocation(CurrentLocation);
-
-		
 	}
 }
 
@@ -139,6 +137,7 @@ void ACorruptor::PerformAttackTrace()
 			if (UCharacterMovementComponent* MoveComp = Char->GetCharacterMovement())
 			{
 				float SlowedMoveSpeed = MoveComp->MaxWalkSpeed = OriginalPlayerSpeed * 0.50f;
+				UGameplayStatics::ApplyDamage(GetWorld()->GetFirstPlayerController()->GetPawn(), 2, GetInstigatorController(), this, UDamageType::StaticClass());
 				MoveComp->MaxWalkSpeed = SlowedMoveSpeed;
 				UE_LOG(LogTemp, Warning, TEXT("%f"), SlowedMoveSpeed);
 			}
@@ -231,8 +230,16 @@ void ACorruptor::ApplyTPoseIceballEffect()
 {
 	bIsAttackEnabled = false;
 
+	FindComponentByClass<USkeletalMeshComponent>()->SetAnimationMode(EAnimationMode::Type::AnimationSingleNode);
+	GetCharacterMovement()->MaxWalkSpeed = 0;
+
 	FTimerHandle EnableAttackTimer;
-	GetWorldTimerManager().SetTimer(EnableAttackTimer, [this]() { bIsAttackEnabled = true; }, 5.0f, false);
+	GetWorldTimerManager().SetTimer(EnableAttackTimer, [this]()
+	{
+		bIsAttackEnabled = true;
+		FindComponentByClass<USkeletalMeshComponent>()->SetAnimationMode(EAnimationMode::Type::AnimationBlueprint);
+		GetCharacterMovement()->MaxWalkSpeed = 600;
+	}, 5.0f, false);
 }
 
 void ACorruptor::ApplyTextureMagicIceballEffect()

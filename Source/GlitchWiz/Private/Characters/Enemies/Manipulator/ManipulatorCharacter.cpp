@@ -46,7 +46,7 @@ void AManipulatorCharacter::Tick(float DeltaTime)
 		FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), End);
 		SetActorRotation(LookAtRotation);
 		bool bInAttackRange = Distance >= MinAttackDistance && Distance <= MaxAttackDistance;
-		if (bInAttackRange)
+		if (bInAttackRange && bIsAttackEnabled)
 		{
 			ManipulatorAiController->SetState("Attack");
 		}
@@ -60,7 +60,15 @@ void AManipulatorCharacter::Tick(float DeltaTime)
 		ManipulatorAiController->SetState("Idle");
 	}
 
-	
+	if  (bShouldFall == true)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Should Fall"));
+		FVector CurrentLocation = GetActorLocation();
+
+		CurrentLocation.Z -= 100 * DeltaTime;
+
+		SetActorLocation(CurrentLocation);
+	}
 }
 
 UBehaviorTree* AManipulatorCharacter::GetBehaviorTree() const
@@ -128,26 +136,49 @@ void AManipulatorCharacter::SpawnProjectile()
 	}
 }
 
+void AManipulatorCharacter::ApplyIceballSlowEffect(float Percent, float Duration)
+{
+	float OriginalSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	float NewSpeed = OriginalSpeed * (1.f - Percent);
+	GetCharacterMovement()->MaxWalkSpeed = NewSpeed;
+
+	FTimerHandle ResetSlowTimer;
+	GetWorldTimerManager().SetTimer(ResetSlowTimer, [this]() { GetCharacterMovement()->MaxWalkSpeed = 600.0f; }, Duration, false);
+}
+
 void AManipulatorCharacter::ApplyNoclipIceballEffect()
 {
+	GetCharacterMovement()->StopMovementImmediately();
+	GetCharacterMovement()->Deactivate();
+
+	FTimerHandle DestroyTimerManipulator;
+	GetWorldTimerManager().SetTimer(DestroyTimerManipulator, [this]() { Destroy(); }, 5.0f, false);
+	
+	bShouldFall = true;
 }
 
 void AManipulatorCharacter::ApplyTPoseIceballEffect()
 {
-}
+	bIsAttackEnabled = false;
 
-void AManipulatorCharacter::ApplyIceballSlowEffect(float Percent, float Duration)
-{
+	FindComponentByClass<USkeletalMeshComponent>()->SetAnimationMode(EAnimationMode::Type::AnimationSingleNode);
+	GetCharacterMovement()->StopMovementImmediately();
+	
+	FTimerHandle EnableAttackTimer;
+	GetWorldTimerManager().SetTimer(EnableAttackTimer, [this]()
+	{
+		bIsAttackEnabled = true;
+		FindComponentByClass<USkeletalMeshComponent>()->SetAnimationMode(EAnimationMode::Type::AnimationBlueprint);
+		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+	}, 5.0f, false);
 }
 
 void AManipulatorCharacter::ApplyTextureMagicIceballEffect()
 {
-}
+	GetCharacterMovement()->MaxWalkSpeed = 0;
 
-void AManipulatorCharacter::ApplyDamageMomentum(float DamageTaken, FDamageEvent const& DamageEvent,
-	APawn* PawnInstigator, AActor* DamageCauser)
-{
-	Super::ApplyDamageMomentum(DamageTaken, DamageEvent, PawnInstigator, DamageCauser);
+	FTimerHandle ResetStunTimer;
+	GetWorldTimerManager().SetTimer(ResetStunTimer, [this]() { GetCharacterMovement()->MaxWalkSpeed = 600.0f; }, 5.0f, false);
 }
 
 
