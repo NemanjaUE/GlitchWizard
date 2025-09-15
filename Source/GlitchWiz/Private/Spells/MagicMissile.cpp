@@ -32,19 +32,7 @@ void AMagicMissile::PerformSpell()
 		FCollisionShape::MakeSphere(1000.0f),
 		Params
 	);
-
-#if WITH_EDITOR
-	FColor SphereColor = bHasHit ? FColor::Green : FColor::Red;
-	DrawDebugSphere(
-		GetWorld(),
-		PlayerPawn->GetActorLocation(),
-		1000.0f,
-		16,
-		SphereColor,
-		false,
-		2.0f
-	);
-#endif
+	
 
 	if (bHasHit)
 	{

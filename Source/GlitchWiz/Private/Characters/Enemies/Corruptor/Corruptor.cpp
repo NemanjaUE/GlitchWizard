@@ -159,7 +159,6 @@ void ACorruptor::PerformAttackTrace()
 			}
 		}
 	}
-	DrawDebugBox(GetWorld(), Center, HalfSize, Rot, FColor::Red, false, 0.2);
 	FTimerHandle ResetHandle;
 	GetWorld()->GetTimerManager().SetTimer(
 	ResetStencilHandle,

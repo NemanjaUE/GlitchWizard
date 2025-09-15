@@ -47,7 +47,7 @@ void UInteractComponent::PerformInteractTrace()
 
 	if (bDebugMode)
 	{
-		UKismetSystemLibrary::DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Green, 2, 2);
+		
 	}
 	
 	bool bPickupableHit{
@@ -71,6 +71,7 @@ void UInteractComponent::PerformInteractTrace()
 			if (ItemToPickUp)
 			{
 				ItemToPickUp->PickUp();
+				
 			}
 		}
 	}
